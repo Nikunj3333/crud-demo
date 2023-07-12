@@ -1,10 +1,10 @@
 <?php
-include '../connect.php';
-$name = "";
-$email = "";
-$mobile = "";
-$password = "";
-$userId = $_GET['id'];
+    include '../connect.php';
+    $name = "";
+    $email = "";
+    $mobile = "";
+    $password = "";
+    $userId = $_GET['id'];
 
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];

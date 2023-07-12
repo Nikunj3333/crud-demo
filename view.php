@@ -73,10 +73,10 @@
                                 <a class="btn btn-sm" href="edit.php?id=<?= $row["id"]; ?>">Edit</a>    
                                 <a 
                                     class="btn btn-sm btn-danger"
-                                    href="data-view.php?action=delete&id=<?= $row["id"]; ?>"
+                                    href="view.php?action=delete&id=<?= $row["id"]; ?>"
                                     onclick="if (confirm('Are you sure?')){return true;}else{event.stopPropagation(); event.preventDefault();};"
                                 >Delete</a>    
-                                <a class="btn btn-sm btn-danger block" href="data-view.php?action=block&id=<?= $row["id"]; ?>">Block</a>    
+                                <a class="btn btn-sm btn-danger block" href="view.php?action=block&id=<?= $row["id"]; ?>">Block</a>    
                             </td>
                         </tr>
                 <?php

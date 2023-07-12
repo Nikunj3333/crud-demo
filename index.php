@@ -1,32 +1,64 @@
-<?php
+<?php   
 include '../connect.php';
+
 $name = "";
 $email = "";
 $mobile = "";
 $password = "";
 
 if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $mobile = $_POST['mobile'];
-    $password = $_POST['password'];
+    $name = htmlspecialchars(trim($_POST['name']));
+    $email = htmlspecialchars(trim($_POST['email']));
+    $mobile = htmlspecialchars(trim($_POST['mobile']));
+    $password = htmlspecialchars(trim($_POST['password']));
+    $isValid = true;
 
-    $sql = "Insert into users(name, email, mobile, password) values('{$name}', '{$email}', '{$mobile}', '{$password}')";
+    // Validations
+    if(empty($name)) {
+        $errorMsg = "Name is required!";
+        $isValid = false;
+    } else if(empty($email)) {
+        // filter_var($email, FILTER_VALIDATE_EMAIL)
+        $errorMsg = "Email is required!";
+        $isValid = false;
+    } else if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errorMsg = "Email is invalid!";
+        $isValid = false;
+    } else if(empty($mobile)) {
+        $errorMsg = "Mobile is required!";
+        $isValid = false;
+    } else if(empty($password)) {
+        $errorMsg = "Password is required!";
+        $isValid = false;
+    }
 
-    // $sql = "insert into `users`(name,email,mobile,password) values ('$name','$email','$mobile','$password')";
+    if($isValid) { // check if data is valid then only perform insert query
+        $sql = "Insert into users(name, email, mobile, password) values('{$name}', '{$email}', '{$mobile}', '{$password}')";
 
-    $result = mysqli_query($con, $sql);
+        // $sql = "insert into `users`(name,email,mobile,password) values ('$name','$email','$mobile','$password')";
 
-    if ($result) {
-        echo '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Success!</strong>
-        Your Entry succesfully!
+        $result = mysqli_query($con, $sql);
+
+        if ($result) {
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Success!</strong>
+            Your Entry succesfully!
+            <button type="button" class="close" dta-dismiss="alert" arial-label="close">
+            <span arial-hidden="true">&time</span>
+            </button>
+            </div>';
+        } else {
+            die(mysqli_error($con));
+        }
+    } 
+    else { // when there is error and $isValid = false
+        echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"><strong>Error!</strong>
+        ' . $errorMsg . '
          <button type="button" class="close" dta-dismiss="alert" arial-label="close">
          <span arial-hidden="true">&time</span>
          </button>
         </div>';
-    } else {
-        die(mysqli_error($con));
     }
+    
 }
 ?>
 
@@ -53,22 +85,22 @@ if (isset($_POST['submit'])) {
             <form method="post" action="">
                 <div class="form-group">
                     <label for="exampleInputName1" class="form-label">Name</label>
-                    <input type="Text" name="name" class="form-control" placeholder="Enter Your Name" autocomplete="off">
+                    <input type="Text" name="name" class="form-control" placeholder="Enter Your Name" autocomplete="off" value="<?php echo $name; ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="exampleInputEmail1" class="form-label">Email</label>
-                    <input type="text" name="email" class="form-control" placeholder="Enter Your Email" autocomplete="off">
+                    <input type="text" name="email" class="form-control" placeholder="Enter Your Email" autocomplete="off" value="<?php echo $email; ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="exampleInputMobile1" class="form-label">Mobile</label>
-                    <input type="text" name="mobile" class="form-control" placeholder="Enter Your Mobile-Number" autocomplete="off">
+                    <input type="text" name="mobile" class="form-control" placeholder="Enter Your Mobile-Number" autocomplete="off" value="<?php echo $mobile; ?>" required>
                 </div>
 
                 <div class="form-group">
                     <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" placeholder="Enter Your Password" autocomplete="off">
+                    <input type="password" name="password" class="form-control" placeholder="Enter Your Password" autocomplete="off" required>
                 </div>
 
                 <button type="submit" class="btn btn-primary" name="submit" value="add_user">Submit</button>
